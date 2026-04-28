@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Test Ampliación de Marketing Digital</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: #f3f4f6;
+      color: #111827;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 18px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #6b7280;
+      margin-bottom: 30px;
+    }
+
+    select, button {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid #d1d5db;
+      font-size: 16px;
+      margin-bottom: 15px;
+    }
+
+    button {
+      background: #111827;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #374151;
+    }
+
+    .question-count {
+      color: #6b7280;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .question {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
+
+    .option {
+      display: block;
+      width: 100%;
+      background: #f9fafb;
+      border: 2px solid #e5e7eb;
+      color: #111827;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      text-align: left;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .option:hover {
+      background: #e5e7eb;
+    }
+
+    .correct {
+      background: #d1fae5 !important;
+      border-color: #10b981 !important;
+    }
+
+    .incorrect {
+      background: #fee2e2 !important;
+      border-color: #ef4444 !important;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .result {
+      text-align: center;
+      margin-top: 25px;
+    }
+
+    .score {
+      font-size: 34px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .small {
+      color: #6b7280;
+      font-size: 15px;
+    }
+
+    .restart {
+      margin-top: 20px;
+      background: #2563eb;
+    }
+
+    .restart:hover {
+      background: #1d4ed8;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="card">
+      <h1>Test Ampliación de Marketing Digital</h1>
+      <p class="subtitle">Preguntas tipo examen por UF</p>
+
+      <div id="inicio">
+        <select id="temaSelect">
+          <option value="">Selecciona un tema</option>
+        </select>
+        <button onclick="iniciarTest()">Empezar test</button>
+      </div>
+
+      <div id="test" class="hidden">
+        <div class="question-count" id="contador"></div>
+        <div class="question" id="pregunta"></div>
+        <div id="opciones"></div>
+      </div>
+
+      <div id="resultado" class="result hidden">
+        <div class="score" id="puntuacion"></div>
+        <p class="small" id="mensajeFinal"></p>
+        <button class="restart" onclick="reiniciar()">Volver a empezar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const temas = [
+      {
+        tema: "UF1 - Marketing digital, CRM y seguridad",
+        preguntas: [
+          {
+            pregunta: "El marketing digital es el marketing que utiliza:",
+            opciones: [
+              "Estrategias de venta en TV o radio.",
+              "Herramientas digitales para atraer al público.",
+              "Técnicas de marketing basadas en técnicas tradicionales."
+            ],
+            correcta: 1
+          },
+          {
+            pregunta: "Un sistema de CRM se preocupa de la:",
+            opciones: [
+              "Gestión de todos los usuarios de la web.",
+              "Gestión de relación de los visitantes anónimos.",
+              "Gestión de clientes."
+            ],
+            correcta: 2
+          },
+          {
+            pregunta: "El carding consiste en:",
+            opciones: [
+              "Comprar online con tarjetas robadas.",
+              "Mensajes de texto con enlaces a sitios maliciosos.",
+              "Pedir un rescate por nuestros datos personales."
+            ],
+            correcta: 0
+          },
+          {
+            pregunta: "Cuando una empresa online incurre en una falta leve, según la LSSI, puede recibir una sanción máxima de:",
+            opciones: [
+              "150 000 euros.",
+              "600 000 euros.",
+              "30 000 euros."
+            ],
+            correcta: 2
+          },
+          {
+            pregunta: "Las cookies son:",
+            opciones: [
+              "Información que se envía a una institución pública pidiendo datos de un posible vendedor.",
+              "Información enviada por un sitio web y que se guarda en el navegador del usuario.",
+              "Información enviada por el usuario y que se guarda en el navegador de la página web visitada."
+            ],
+            correcta: 1
+          },
+          {
+            pregunta: "Se denomina spam a:",
+            opciones: [
+              "Los mensajes de texto con una dirección web.",
+              "Los mensajes publicitarios pedidos por el usuario.",
+              "Los mensajes publicitarios no solicitados."
+            ],
+            correcta: 2
+          },
+          {
+            pregunta: "Se denomina hacker:",
+            opciones: [
+              "Al usuario online que compra productos y paga al contado.",
+              "A la persona que tiene conocimientos y accede a los sistemas informáticos para manipularlos.",
+              "A quien navega por Internet para visitar páginas y consultar precios."
+            ],
+            correcta: 1
+          },
+          {
+            pregunta: "Un plan de marketing digital es:",
+            opciones: [
+              "Un sistema cuya finalidad es vender productos.",
+              "Un sistema que permite comprar por Internet.",
+              "Un sistema que permite hacer pagos a plazos con cuenta bancaria."
+            ],
+            correcta: 0
+          },
+          {
+            pregunta: "Con un plan de marketing digital se desea:",
+            opciones: [
+              "Cobrar una deuda.",
+              "Conseguir tráfico hacia la página web.",
+              "Comprar más productos."
+            ],
+            correcta: 1
+          },
+          {
+            pregunta: "El buyer persona es:",
+            opciones: [
+              "La persona responsable de pedidos de un e-commerce.",
+              "El recorrido del cliente desde que entra en contacto con nuestra tienda.",
+              "El arquetipo de cliente ideal."
+            ],
+            correcta: 2
+          },
+          {
+            pregunta: "¿Cómo se puede fidelizar a un cliente web?",
+            opciones: [
+              "Si ya es cliente, no hace falta.",
+              "Transfiriendo sus datos a otra empresa.",
+              "Con un programa de puntos."
+            ],
+            correcta: 2
+          },
+          {
+            pregunta: "El aviso de cookies se presenta en:",
+            opciones: [
+              "En tres niveles: básicas, analíticas y publicitarias.",
+              "Dos tipos de cookies: básicas y analíticas.",
+              "En dos capas: una básica y una más extensa."
+            ],
+            correcta: 2
+          },
+          {
+            pregunta: "Una precaución que se debe tener en cuenta en el momento de hacer una compra online es:",
+            opciones: [
+              "Tener los datos bancarios a mano.",
+              "Tener un ordenador recién comprado.",
+              "Utilizar un navegador seguro."
+            ],
+            correcta: 2
+          },
+          {
+            pregunta: "Las siglas CAME corresponden a:",
+            opciones: [
+              "Corregir, amenazar, medir y eliminar.",
+              "Comenzar, avanzar, medir y eliminar.",
+              "Corregir, afrontar, mantener y explotar."
+            ],
+            correcta: 2
+          },
+          {
+            pregunta: "El marketing digital permite realizar:",
+            opciones: [
+              "Pagos online.",
+              "Estudios personalizados de los clientes.",
+              "Compras online."
+            ],
+            correcta: 1
+          }
+        ]
+      },
+
+      {
+        tema: "UF2 - E-commerce, captación y tienda online",
+        preguntas: [
+          {
+            pregunta: "Señala la acción efectiva para captar clientes online:",
+            opciones: [
+              "Ignorar el email marketing.",
+              "Campañas en redes sociales segmentadas.",
+              "Enviar mensajes por WhatsApp sin permiso."
+            ],
+            correcta: 1
+          },
+          {
+            pregunta: "Una web tiene una estructura jerárquica cuando:",
+            opciones: [
+              "A partir de la página de inicio se sitúan las demás una detrás de otra.",
+              "Las páginas van enlazadas formando una red.",
+              "A partir de la página principal se accede al resto."
+            ],
+            correcta: 2
+          },
+          {
+            pregunta: "¿Qué es ZMOT?",
+            opciones: [
+              "El momento en que el cliente paga.",
+              "El primer contacto telefónico.",
+              "El momento en que el usuario investiga online antes de decidir la compra."
+            ],
+            correcta: 2
+          },
+          {
+            pregunta: "¿Qué contenido no debería faltar en una ficha de producto?",
+            opciones: [
+              "Mapa de ubicación.",
+              "Imágenes, descripción y precio.",
+              "Reseñas y comentarios de clientes."
+            ],
+            correcta: 1
+          },
+          {
+            pregunta: "¿Qué sistema mejora la seguridad de una tienda online?",
+            opciones: [
+              "Certificado SSL.",
+              "Redes sociales.",
+              "SEO."
+            ],
+            correcta: 0
+          },
+          {
+            pregunta: "¿Qué parte del embudo de ventas representa TOFU?",
+            opciones: [
+              "Momento de cierre de venta.",
+              "Momento en que se hace el pago.",
+              "Parte alta del embudo: atracción."
+            ],
+            correcta: 2
+          },
+          {
+            pregunta: "¿Qué plataforma agrupa productos de múltiples vendedores en una misma web?",
+            opciones: [
+              "E-shop.",
+              "Marketplace.",
+              "Subasta."
+            ],
+            correcta: 1
+          },
+          {
+            pregunta: "Señala la herramienta logística clave para el seguimiento de pedidos:",
+            opciones: [
+              "TMS, Transport Management System.",
+              "PhotoShop.",
+              "CRM."
+            ],
+            correcta: 0
+          },
+          {
+            pregunta: "Señala el tipo de estructura de navegación web:",
+            opciones: [
+              "Horizontal.",
+              "Piramidal.",
+              "Jerárquica."
+            ],
+            correcta: 2
+          },
+          {
+            pregunta: "¿Qué elemento define mejor una tienda virtual tipo e-shop?",
+            opciones: [
+              "Tienda online gestionada por una sola marca.",
+              "Plataforma de subastas.",
+              "Venta de servicios."
+            ],
+            correcta: 0
+          },
+          {
+            pregunta: "Señala la automatización típica de un e-commerce:",
+            opciones: [
+              "Envío automático de correos tras compra.",
+              "Publicación programada de entradas al blog.",
+              "Cierre automático de tienda física."
+            ],
+            correcta: 0
+          },
+          {
+            pregunta: "¿Qué tipo de comercio electrónico se dirige a un segmento muy específico del mercado?",
+            opciones: [
+              "Comercio de nicho.",
+              "E-shop.",
+              "Marketplace."
+            ],
+            correcta: 0
+          },
+          {
+            pregunta: "¿Cuál de estos medios de pago es digital y muy utilizado en tiendas online?",
+            opciones: [
+              "Pagaré.",
+              "Cheque bancario.",
+              "PayPal."
+            ],
+            correcta: 2
+          },
+          {
+            pregunta: "Señala el método de envío habitual en e-commerce:",
+            opciones: [
+              "Envío estándar o exprés.",
+              "Transporte por drones.",
+              "Descarga por Torrent."
+            ],
+            correcta: 0
+          },
+          {
+            pregunta: "¿Qué estrategia de marketing se basa en el contenido útil para el cliente?",
+            opciones: [
+              "Publicidad en televisión.",
+              "Marketing de contenidos.",
+              "Llamadas a puerta fría."
+            ],
+            correcta: 1
+          }
+        ]
+      },
+
+      {
+        tema: "UF3 - Web, CMS, hosting y seguridad",
+        preguntas: [
+          {
+            pregunta: "¿Qué es un troyano?",
+            opciones: [
+              "Un programa que infecta un programa.",
+              "Un malware diseñado para robar archivos.",
+              "Un robo de contraseñas."
+            ],
+            correcta: 1
+          },
+          {
+            pregunta: "¿Qué función tiene el uso de etiquetas alt en las imágenes?",
+            opciones: [
+              "Aumentar la calidad de la imagen.",
+              "Reducir el tamaño de la imagen.",
+              "Mejorar la accesibilidad y el posicionamiento SEO."
+            ],
+            correcta: 2
+          },
+          {
+            pregunta: "¿Qué lenguaje se utiliza principalmente para la estructura de una página web?",
+            opciones: [
+              "HTML.",
+              "JavaScript.",
+              "CSS."
+            ],
+            correcta: 0
+          },
+          {
+            pregunta: "¿Cuál de los siguientes CMS implica un pago mensual?",
+            opciones: [
+              "WordPress.",
+              "Shopify.",
+              "Magento."
+            ],
+            correcta: 1
+          },
+          {
+            pregunta: "¿Qué opción no corresponde a un CMS como WordPress?",
+            opciones: [
+              "Uso de plantillas y plugins.",
+              "Gestión de contenido sin programación.",
+              "Requiere programación en C++."
+            ],
+            correcta: 2
+          },
+          {
+            pregunta: "¿Con qué formato se suben los audios a una página web?",
+            opciones: [
+              "PNG.",
+              "MP3 y OGG.",
+              "MP4."
+            ],
+            correcta: 1
+          },
+          {
+            pregunta: "¿Cuál de estas herramientas se utiliza para transferir archivos desde un ordenador local a un servidor web?",
+            opciones: [
+              "WordPress.",
+              "FileZilla.",
+              "Shopify."
+            ],
+            correcta: 1
+          },
+          {
+            pregunta: "¿Cuál de las siguientes opciones no es una ventaja de mantener actualizado el contenido de un e-commerce?",
+            opciones: [
+              "Mayor velocidad de carga en el servidor.",
+              "Fidelización del cliente.",
+              "Mejora del posicionamiento SEO."
+            ],
+            correcta: 0
+          },
+          {
+            pregunta: "Si una web tiene certificado de seguridad SSL, ¿de qué color es el candado que aparece en Google?",
+            opciones: [
+              "Negro.",
+              "Verde.",
+              "Amarillo."
+            ],
+            correcta: 0
+          },
+          {
+            pregunta: "¿Cuál de las siguientes opciones no es un tipo de editor web?",
+            opciones: [
+              "Editores en papel.",
+              "Editores de texto.",
+              "Editores de código avanzado."
+            ],
+            correcta: 0
+          },
+          {
+            pregunta: "¿Para qué sirve el FTP?",
+            opciones: [
+              "Para diseñar páginas web.",
+              "Para hacer compras online.",
+              "Para transferir archivos."
+            ],
+            correcta: 2
+          },
+          {
+            pregunta: "¿Qué tipo de imágenes son recomendadas para optimizar el rendimiento de una web?",
+            opciones: [
+              "BMP.",
+              "PNG con transparencia cuando sea necesario.",
+              "TIFF para todo tipo de imágenes."
+            ],
+            correcta: 1
+          },
+          {
+            pregunta: "¿A qué nos referimos cuando hablamos de la web 2.0?",
+            opciones: [
+              "A las utilidades y servicios de Internet que se basan en la colaboración y participación de los usuarios en la creación de contenido.",
+              "A una página web antigua.",
+              "A todo lo referente a los blogs, redes sociales y wikis."
+            ],
+            correcta: 0
+          },
+          {
+            pregunta: "¿Cómo se llama el hosting en el que están alojadas varias páginas webs?",
+            opciones: [
+              "Hosting simultáneo.",
+              "Hosting compartido.",
+              "Hosting VPS."
+            ],
+            correcta: 1
+          },
+          {
+            pregunta: "¿Qué son los tags?",
+            opciones: [
+              "Etiquetas.",
+              "Ficheros.",
+              "Sistemas operativos."
+            ],
+            correcta: 0
+          }
+        ]
+      }
+    ];
+
+    const temaSelect = document.getElementById("temaSelect");
+    const inicio = document.getElementById("inicio");
+    const test = document.getElementById("test");
+    const resultado = document.getElementById("resultado");
+    const contador = document.getElementById("contador");
+    const preguntaTexto = document.getElementById("pregunta");
+    const opcionesDiv = document.getElementById("opciones");
+    const puntuacionTexto = document.getElementById("puntuacion");
+    const mensajeFinal = document.getElementById("mensajeFinal");
+
+    let preguntasActuales = [];
+    let preguntaActual = 0;
+    let puntuacion = 0;
+
+    temas.forEach((tema, index) => {
+      const option = document.createElement("option");
+      option.value = index;
+      option.textContent = tema.tema;
+      temaSelect.appendChild(option);
+    });
+
+    function iniciarTest() {
+      const temaElegido = temaSelect.value;
+
+      if (temaElegido === "") {
+        alert("Selecciona un tema primero.");
+        return;
+      }
+
+      preguntasActuales = temas[temaElegido].preguntas;
+      preguntaActual = 0;
+      puntuacion = 0;
+
+      inicio.classList.add("hidden");
+      resultado.classList.add("hidden");
+      test.classList.remove("hidden");
+
+      mostrarPregunta();
+    }
+
+    function mostrarPregunta() {
+      const pregunta = preguntasActuales[preguntaActual];
+
+      contador.textContent = `Pregunta ${preguntaActual + 1} de ${preguntasActuales.length}`;
+      preguntaTexto.textContent = pregunta.pregunta;
+      opcionesDiv.innerHTML = "";
+
+      pregunta.opciones.forEach((opcion, index) => {
+        const button = document.createElement("button");
+        button.classList.add("option");
+        button.textContent = opcion;
+        button.onclick = () => comprobarRespuesta(index);
+        opcionesDiv.appendChild(button);
+      });
+    }
+
+    function comprobarRespuesta(indexSeleccionado) {
+      const pregunta = preguntasActuales[preguntaActual];
+      const botones = document.querySelectorAll(".option");
+
+      botones.forEach((boton, index) => {
+        boton.disabled = true;
+
+        if (index === pregunta.correcta) {
+          boton.classList.add("correct");
+        }
+
+        if (index === indexSeleccionado && index !== pregunta.correcta) {
+          boton.classList.add("incorrect");
+        }
+      });
+
+      if (indexSeleccionado === pregunta.correcta) {
+        puntuacion++;
+      }
+
+      setTimeout(() => {
+        preguntaActual++;
+
+        if (preguntaActual < preguntasActuales.length) {
+          mostrarPregunta();
+        } else {
+          mostrarResultado();
+        }
+      }, 900);
+    }
+
+    function mostrarResultado() {
+      test.classList.add("hidden");
+      resultado.classList.remove("hidden");
+
+      puntuacionTexto.textContent = `${puntuacion} / ${preguntasActuales.length}`;
+
+      const porcentaje = (puntuacion / preguntasActuales.length) * 100;
+
+      if (porcentaje >= 90) {
+        mensajeFinal.textContent = "Brutal. Lo llevas muy bien.";
+      } else if (porcentaje >= 70) {
+        mensajeFinal.textContent = "Bien, pero repasa las que falles.";
+      } else if (porcentaje >= 50) {
+        mensajeFinal.textContent = "Vas justo. Necesitas otra vuelta.";
+      } else {
+        mensajeFinal.textContent = "Hay que repasarlo bastante más.";
+      }
+    }
+
+    function reiniciar() {
+      resultado.classList.add("hidden");
+      inicio.classList.remove("hidden");
+      temaSelect.value = "";
+    }
+  </script>
+
+</body>
+</html>
